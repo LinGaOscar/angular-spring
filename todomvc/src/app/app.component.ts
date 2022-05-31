@@ -1,4 +1,6 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { HttpService } from './http.service';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +13,27 @@ export class AppComponent {
   todo = '';
   filterType = 'All';
   toggleAll = false;
+  data :any;
+
+  constructor(private httpService: HttpService) {}
+
+  ngOnInit(): void {
+    this.httpService.getPosts().subscribe({
+      next: (v) => {
+        console.log(JSON.stringify(v));
+        this.data = v;
+        
+      },
+      error: (e) => {
+        console.error(e);
+      },
+    });
+
+    this.httpService.getMt().subscribe((res) => {
+      // let response: HttpResponse<any> = res;
+      // this.data = res.body;
+    });
+  }
 
   addTodo() {
     this.todos.push({
@@ -36,8 +59,13 @@ export class AppComponent {
   }
 
   updateToggleAllState() {
-    this.toggleAll = this.todos.filter((item) => {
-      return !item.done;
-    }).length===0;
+    this.toggleAll =
+      this.todos.filter((item) => {
+        return !item.done;
+      }).length === 0;
+  }
+
+  removeTodo(todo: any) {
+    this.todos.splice(this.todos.indexOf(todo), 1);
   }
 }
