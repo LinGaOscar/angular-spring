@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpResponse } from  '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, map, retry } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HttpService {
-  private url = 'https://my-json-server.typicode.com/JSGund/XHR-Fetch-Request-JavaScript/posts';
+  private url =
+    'https://my-json-server.typicode.com/JSGund/XHR-Fetch-Request-JavaScript/posts';
 
- 
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getPosts() {
     return this.http.get(this.url);
@@ -20,15 +19,14 @@ export class HttpService {
   extractData(res: Response) {
     throw new Error('Method not implemented.');
   }
- 
+
   options = {
     observe: 'response' as 'response',
-    responseType: 'text'
-  }
+    responseType: 'text',
+  };
 
-  getMt(){
-    return this.http.get(this.url, {observe: 'response'});
-    
+  getMt() {
+    // return this.http.get(this.url).pipe(map(r => r.json()));
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -39,9 +37,13 @@ export class HttpService {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
       console.error(
-        'Backend returned code ${error.status}, body was: ', error.error);
+        'Backend returned code ${error.status}, body was: ',
+        error.error
+      );
     }
     // Return an observable with a user-facing error message.
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+    return throwError(
+      () => new Error('Something bad happened; please try again later.')
+    );
   }
 }
